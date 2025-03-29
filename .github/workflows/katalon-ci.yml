@@ -3,14 +3,14 @@ name: Katalon CI/CD
 on:
   push:
     branches:
-      - main  # Chạy khi có commit vào nhánh main
+      - main
   pull_request:
     branches:
-      - main  # Chạy khi có pull request vào nhánh main
+      - main
 
 jobs:
   katalon-test:
-    runs-on: ubuntu-latest  # Sử dụng môi trường Linux
+    runs-on: ubuntu-latest
 
     steps:
       - name: 📥 Checkout code từ GitHub
@@ -18,22 +18,20 @@ jobs:
 
       - name: 🔽 Download & Cài đặt Katalon Studio
         run: |
-            wget https://download.katalon.com/9.7.5/Katalon_Studio_Linux_64-9.7.5.tar.gz
-            tar -xvzf Katalon_Studio_Linux_64-9.7.5.tar.gz -C /opt/
-            ls -l /opt/  # Kiểm tra xem file đã được giải nén chưa
-        
-      - name: 🛠 Kiểm tra file sau khi tải
+          wget https://download.katalon.com/9.7.5/Katalon_Studio_Linux_64-9.7.5.tar.gz
+          tar -xvzf Katalon_Studio_Linux_64-9.7.5.tar.gz -C /opt/
+          ls -l /opt/  # Kiểm tra file đã giải nén
+
+      - name: 🛠 Cấp quyền thực thi cho Katalon
         run: |
-            wget https://download.katalon.com/9.7.5/Katalon_Studio_Linux_64-9.7.5.tar.gz
-            tar -xvzf Katalon_Studio_Linux_64-9.7.5.tar.gz
-            ls -l  # Kiểm tra thư mục sau khi giải nén
-        
+          chmod +x /opt/Katalon_Studio_Linux_64-9.7.5/katalonc
+
       - name: 🚀 Chạy Katalon Test Suite
         run: |
           /opt/Katalon_Studio_Linux_64-9.7.5/katalonc -noSplash -runMode=console \
-          -projectPath="$(pwd)/TestLogin" \
-          -retry=0 -testSuitePath="Test Suites/Test_Suite_Login" \
-          -executionProfile="default" -browserType="Chrome"
+            -projectPath="$(pwd)/TestLogin" \
+            -retry=0 -testSuitePath="Test Suites/Test_Suite_Login" \
+            -executionProfile="default" -browserType="Chrome"
 
       - name: 📤 Upload báo cáo kiểm thử
         uses: actions/upload-artifact@v4
