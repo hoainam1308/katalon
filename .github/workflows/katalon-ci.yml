@@ -23,7 +23,7 @@ jobs:
           ls -1 /opt/Katalon_Studio_Linux_64-9.7.5/katalon | sort
       - name: 🛠 Cấp quyền thực thi cho Katalon
         run: |
-          chmod +x /opt/Katalon_Studio_Linux_64-9.7.5/katalonc
+          chmod +x /opt/Katalon_Studio_Linux_64-9.7.5/katalon
 
       - name: 🚀 Chạy Katalon Test Suite
         run: |
