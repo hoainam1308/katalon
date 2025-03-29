@@ -21,7 +21,13 @@ jobs:
             wget https://download.katalon.com/9.7.5/Katalon_Studio_Linux_64-9.7.5.tar.gz
             tar -xvzf Katalon_Studio_Linux_64-9.7.5.tar.gz -C /opt/
             ls -l /opt/  # Kiểm tra xem file đã được giải nén chưa
-
+        
+    - name: 🛠 Kiểm tra file sau khi tải
+      run: |
+        wget https://download.katalon.com/9.7.5/Katalon_Studio_Linux_64-9.7.5.tar.gz
+        tar -xvzf Katalon_Studio_Linux_64-9.7.5.tar.gz
+        ls -l  # Kiểm tra thư mục sau khi giải nén
+        
       - name: 🚀 Chạy Katalon Test Suite
         run: |
           ./katalon/Katalon_Studio_Linux/katalonc -noSplash -runMode=console \
