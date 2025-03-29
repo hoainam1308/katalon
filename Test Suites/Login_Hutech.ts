@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestSuiteEntity>
+   <description></description>
+   <name>Login_Hutech</name>
+   <tag></tag>
+   <isRerun>false</isRerun>
+   <mailRecipient></mailRecipient>
+   <numberOfRerun>0</numberOfRerun>
+   <pageLoadTimeout>5</pageLoadTimeout>
+   <pageLoadTimeoutDefault>true</pageLoadTimeoutDefault>
+   <rerunFailedTestCasesOnly>false</rerunFailedTestCasesOnly>
+   <rerunImmediately>true</rerunImmediately>
+   <testSuiteGuid>726875e9-ec25-45d7-b286-2f17f22afb29</testSuiteGuid>
+   <testCaseLink>
+      <guid>e17a63cf-dd48-4001-98e2-8c2409d232a7</guid>
+      <isReuseDriver>false</isReuseDriver>
+      <isRun>true</isRun>
+      <testCaseId>Test Cases/Login_Hutech</testCaseId>
+      <testDataLink>
+         <combinationType>MANY</combinationType>
+         <id>a192d5ca-3dfe-4c52-98bc-2e505ff7cca2</id>
+         <iterationEntity>
+            <iterationType>ALL</iterationType>
+            <value></value>
+         </iterationEntity>
+         <testDataId>Data Files/Data_Login</testDataId>
+      </testDataLink>
+      <usingDataBindingAtTestSuiteLevel>true</usingDataBindingAtTestSuiteLevel>
+      <variableLink>
+         <testDataLinkId>a192d5ca-3dfe-4c52-98bc-2e505ff7cca2</testDataLinkId>
+         <type>DATA_COLUMN</type>
+         <value>account</value>
+         <variableId>96fce9c4-2a9e-44bf-ba55-481bb0dd1f33</variableId>
+      </variableLink>
+      <variableLink>
+         <testDataLinkId>a192d5ca-3dfe-4c52-98bc-2e505ff7cca2</testDataLinkId>
+         <type>DATA_COLUMN</type>
+         <value>password</value>
+         <variableId>2aa21f38-db31-4122-bd10-efd4a043e947</variableId>
+      </variableLink>
+   </testCaseLink>
+</TestSuiteEntity>

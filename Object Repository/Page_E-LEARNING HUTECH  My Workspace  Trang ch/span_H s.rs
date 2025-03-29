@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebElementEntity>
+   <description></description>
+   <name>span_H s</name>
+   <tag></tag>
+   <elementGuidId>81bbbf31-9ac7-4129-8d6a-24543bd8f4d1</elementGuidId>
+   <selectorCollection>
+      <entry>
+         <key>CSS</key>
+         <value>li:nth-of-type(2) > a.toolMenuLink > span.menuTitle</value>
+      </entry>
+      <entry>
+         <key>XPATH</key>
+         <value>//div[@id='toolMenu']/ul/li[2]/a/span[2]</value>
+      </entry>
+   </selectorCollection>
+   <selectorMethod>XPATH</selectorMethod>
+   <smartLocatorCollection>
+      <entry>
+         <key>SMART_LOCATOR</key>
+         <value>internal:role=link[name=&quot;Hồ sơ&quot;i]</value>
+      </entry>
+   </smartLocatorCollection>
+   <smartLocatorEnabled>false</smartLocatorEnabled>
+   <useRalativeImagePath>true</useRalativeImagePath>
+   <webElementProperties>
+      <isSelected>false</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>tag</name>
+      <type>Main</type>
+      <value>span</value>
+      <webElementGuid>025698c6-cf35-474b-aaa6-7472fed7fc55</webElementGuid>
+   </webElementProperties>
+   <webElementProperties>
+      <isSelected>false</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>class</name>
+      <type>Main</type>
+      <value>menuTitle</value>
+      <webElementGuid>a62e0a7d-3ca9-468e-a760-4ce18c4dd822</webElementGuid>
+   </webElementProperties>
+   <webElementProperties>
+      <isSelected>true</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>text</name>
+      <type>Main</type>
+      <value>Hồ sơ</value>
+      <webElementGuid>fc755970-3707-43dd-aeb8-3ca9bfcb4ec6</webElementGuid>
+   </webElementProperties>
+   <webElementProperties>
+      <isSelected>false</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>xpath</name>
+      <type>Main</type>
+      <value>id(&quot;toolMenu&quot;)/ul[1]/li[2]/a[@class=&quot;toolMenuLink&quot;]/span[@class=&quot;menuTitle&quot;]</value>
+      <webElementGuid>7ff08ce5-2e98-4b4d-ba14-28e04948674a</webElementGuid>
+   </webElementProperties>
+   <webElementXpaths>
+      <isSelected>true</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>xpath:idRelative</name>
+      <type>Main</type>
+      <value>//div[@id='toolMenu']/ul/li[2]/a/span[2]</value>
+      <webElementGuid>43a53968-d961-4b6d-aca9-aae79dd5dd57</webElementGuid>
+   </webElementXpaths>
+   <webElementXpaths>
+      <isSelected>false</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>xpath:neighbor</name>
+      <type>Main</type>
+      <value>(.//*[normalize-space(text()) and normalize-space(.)='Trang chủ'])[1]/following::span[2]</value>
+      <webElementGuid>b8a7d845-a809-4893-a6a2-76e66b45424c</webElementGuid>
+   </webElementXpaths>
+   <webElementXpaths>
+      <isSelected>false</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>xpath:neighbor</name>
+      <type>Main</type>
+      <value>(.//*[normalize-space(text()) and normalize-space(.)='Công cụ bắt đầu ở đây'])[1]/following::span[4]</value>
+      <webElementGuid>d3694895-53f8-488b-9016-89952e832581</webElementGuid>
+   </webElementXpaths>
+   <webElementXpaths>
+      <isSelected>false</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>xpath:neighbor</name>
+      <type>Main</type>
+      <value>(.//*[normalize-space(text()) and normalize-space(.)='Thành viên'])[1]/preceding::span[2]</value>
+      <webElementGuid>3eaeb65c-5554-4c9b-a0a5-aa5a7eb4787a</webElementGuid>
+   </webElementXpaths>
+   <webElementXpaths>
+      <isSelected>false</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>xpath:neighbor</name>
+      <type>Main</type>
+      <value>(.//*[normalize-space(text()) and normalize-space(.)='Lịch'])[1]/preceding::span[4]</value>
+      <webElementGuid>f90c293d-9016-4d8a-ada2-84bc8d27c4b7</webElementGuid>
+   </webElementXpaths>
+   <webElementXpaths>
+      <isSelected>false</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>xpath:neighbor</name>
+      <type>Main</type>
+      <value>//*/text()[normalize-space(.)='Hồ sơ']/parent::*</value>
+      <webElementGuid>9fa86bc2-bee8-4c8d-899d-fbe466a8acae</webElementGuid>
+   </webElementXpaths>
+   <webElementXpaths>
+      <isSelected>false</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>xpath:position</name>
+      <type>Main</type>
+      <value>//li[2]/a/span[2]</value>
+      <webElementGuid>259c2bde-3850-47cc-9c4b-dd8deda881c5</webElementGuid>
+   </webElementXpaths>
+   <webElementXpaths>
+      <isSelected>false</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>xpath:customAttributes</name>
+      <type>Main</type>
+      <value>//span[(text() = 'Hồ sơ' or . = 'Hồ sơ')]</value>
+      <webElementGuid>4f4d7a67-5bde-4753-a8b1-f68b7e0dba27</webElementGuid>
+   </webElementXpaths>
+</WebElementEntity>
