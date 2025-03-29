@@ -1,4 +1,4 @@
-name: Katalon CI/CD
+name: Katalon CI/CD (Windows)
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   katalon-test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: 📥 Checkout code từ GitHub
@@ -18,22 +18,20 @@ jobs:
 
       - name: 🔽 Download & Cài đặt Katalon Studio
         run: |
-          wget https://download.katalon.com/9.7.5/Katalon_Studio_Linux_64-9.7.5.tar.gz
-          tar -xvzf Katalon_Studio_Linux_64-9.7.5.tar.gz -C /opt/
-          ls -1 /opt/Katalon_Studio_Linux_64-9.7.5/katalon | sort
-      - name: 🛠 Cấp quyền thực thi cho Katalon
-        run: |
-          chmod +x /opt/Katalon_Studio_Linux_64-9.7.5/katalon
+          Invoke-WebRequest -Uri "https://download.katalon.com/9.7.5/Katalon_Studio_Windows_64-9.7.5.zip" -OutFile "Katalon_Studio_Windows_64-9.7.5.zip"
+          Expand-Archive -Path "Katalon_Studio_Windows_64-9.7.5.zip" -DestinationPath "C:\Katalon"
+          dir C:\Katalon
 
       - name: 🚀 Chạy Katalon Test Suite
         run: |
-          /opt/Katalon_Studio_Linux_64-9.7.5/katalon -noSplash -runMode=console \
-            -projectPath="$(pwd)/TestLogin" \
-            -retry=0 \
-            -testSuitePath="Test Suites/Test_Suite_Login" \
-            -executionProfile="default" \
-            -browserType="Chrome" \
+          C:\Katalon\katalonc.exe -noSplash -runMode=console `
+            -projectPath="${{ github.workspace }}\TestLogin" `
+            -retry=0 `
+            -testSuitePath="Test Suites/Test_Suite_Login" `
+            -executionProfile="default" `
+            -browserType="Chrome" `
             -apiKey="c6e85924-54b0-48b4-8b79-deae4e648ada"
+        shell: powershell
 
       - name: 📤 Upload báo cáo kiểm thử
         uses: actions/upload-artifact@v4
