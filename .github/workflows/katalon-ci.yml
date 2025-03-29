@@ -20,17 +20,7 @@ jobs:
         run: |
           wget https://download.katalon.com/9.7.5/Katalon_Studio_Linux_64-9.7.5.tar.gz
           tar -xvzf Katalon_Studio_Linux_64-9.7.5.tar.gz -C /opt/
-          ls -l /opt/  # Kiểm tra file đã giải nén
-
-      - name: 🛠 Kiểm tra file sau khi tải
-        run: |
-          wget https://download.katalon.com/9.7.5/Katalon_Studio_Linux_64-9.7.5.tar.gz
-          tar -xvzf Katalon_Studio_Linux_64-9.7.5.tar.gz -C /opt/
-          echo "🟢 Kiểm tra nội dung thư mục /opt/"
-          ls -l Katalon_Studio_Linux_64-9.7.5/
-          echo "🟢 Kiểm tra tất cả các file trong /opt/"
-          find /opt/ -type f
-
+          ls -d /opt/Katalon_Studio_Linux_64-9.7.5/  # Kiểm tra file đã giải nén
 
       - name: 🛠 Cấp quyền thực thi cho Katalon
         run: |
