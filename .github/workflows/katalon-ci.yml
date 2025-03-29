@@ -27,7 +27,7 @@ jobs:
 
       - name: 🚀 Chạy Katalon Test Suite
         run: |
-          /opt/Katalon_Studio_Linux_64-9.7.5/katalonc -noSplash -runMode=console \
+          /opt/Katalon_Studio_Linux_64-9.7.5/katalon -noSplash -runMode=console \
             -projectPath="$(pwd)/TestLogin" \
             -retry=0 -testSuitePath="Test Suites/Test_Suite_Login" \
             -executionProfile="default" -browserType="Chrome"
