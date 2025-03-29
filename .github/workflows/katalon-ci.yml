@@ -27,7 +27,7 @@ jobs:
           wget https://download.katalon.com/9.7.5/Katalon_Studio_Linux_64-9.7.5.tar.gz
           tar -xvzf Katalon_Studio_Linux_64-9.7.5.tar.gz -C /opt/
           echo "🟢 Kiểm tra nội dung thư mục /opt/"
-          ls -l /opt/
+          ls -l Katalon_Studio_Linux_64-9.7.5/
           echo "🟢 Kiểm tra tất cả các file trong /opt/"
           find /opt/ -type f
 
