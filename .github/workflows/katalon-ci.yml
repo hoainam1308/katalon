@@ -18,10 +18,9 @@ jobs:
 
       - name: 🔽 Download & Cài đặt Katalon Studio
         run: |
-          curl -L --header "Authorization: Bearer ${{ secrets.c6e85924-54b0-48b4-8b79-deae4e648ada }}" \
-          -o Katalon_Studio_Linux.zip \
-          https://download.katalon.com/9.0.0/Katalon_Studio_Linux.zip
-          unzip Katalon_Studio_Linux.zip -d katalon
+            wget https://download.katalon.com/9.7.5/Katalon_Studio_Linux_64-9.7.5.tar.gz
+            tar -xvzf Katalon_Studio_Linux_64-9.7.5.tar.gz -C /opt/
+            ls -l /opt/  # Kiểm tra xem file đã được giải nén chưa
 
       - name: 🚀 Chạy Katalon Test Suite
         run: |
