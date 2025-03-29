@@ -30,10 +30,10 @@ jobs:
         
       - name: 🚀 Chạy Katalon Test Suite
         run: |
-          ./katalon/Katalon_Studio_Linux/katalonc -noSplash -runMode=console \
-            -projectPath="$(pwd)/TestLogin" \
-            -retry=0 -testSuitePath="Test Suites/Test_Suite_Login" \
-            -executionProfile="default" -browserType="Chrome"
+          /opt/Katalon_Studio_Linux_64-9.7.5/katalonc -noSplash -runMode=console \
+          -projectPath="$(pwd)/TestLogin" \
+          -retry=0 -testSuitePath="Test Suites/Test_Suite_Login" \
+          -executionProfile="default" -browserType="Chrome"
 
       - name: 📤 Upload báo cáo kiểm thử
         uses: actions/upload-artifact@v4
