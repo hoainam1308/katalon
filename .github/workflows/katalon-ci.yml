@@ -20,7 +20,7 @@ jobs:
         run: |
           wget https://download.katalon.com/9.7.5/Katalon_Studio_Linux_64-9.7.5.tar.gz
           tar -xvzf Katalon_Studio_Linux_64-9.7.5.tar.gz -C /opt/
-          ls -d /opt/Katalon_Studio_Linux_64-9.7.5/  # Kiểm tra file đã giải nén
+          ls -lh /opt/Katalon_Studio_Linux_64-9.7.5/
 
       - name: 🛠 Cấp quyền thực thi cho Katalon
         run: |
