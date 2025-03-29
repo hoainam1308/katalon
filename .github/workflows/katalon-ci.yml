@@ -18,13 +18,20 @@ jobs:
 
       - name: 🔽 Download & Cài đặt Katalon Studio
         run: |
-          Invoke-WebRequest -Uri "https://download.katalon.com/9.7.5/Katalon_Studio_Windows_64-9.7.5.zip" -OutFile "Katalon_Studio_Windows_64-9.7.5.zip"
-          Expand-Archive -Path "Katalon_Studio_Windows_64-9.7.5.zip" -DestinationPath "C:\Katalon"
+          Invoke-WebRequest -Uri "https://download.katalon.com/9.7.5/Katalon_Studio_Windows_64-9.7.5.zip" -OutFile "Katalon.zip"
+          Expand-Archive -Path "Katalon.zip" -DestinationPath "C:\Katalon"
           dir C:\Katalon
+        shell: powershell
+
+      - name: 🔍 Kiểm tra vị trí của katalonc.exe
+        run: |
+          Get-ChildItem -Path "C:\Katalon" -Recurse -Filter "katalonc.exe"
+        shell: powershell
 
       - name: 🚀 Chạy Katalon Test Suite
         run: |
-          C:\Katalon\katalonc.exe -noSplash -runMode=console `
+          $katalonPath = Get-ChildItem -Path "C:\Katalon" -Recurse -Filter "katalonc.exe" | Select-Object -ExpandProperty FullName
+          & $katalonPath -noSplash -runMode=console `
             -projectPath="${{ github.workspace }}\TestLogin" `
             -retry=0 `
             -testSuitePath="Test Suites/Test_Suite_Login" `
