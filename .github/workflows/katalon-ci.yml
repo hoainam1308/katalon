@@ -1,0 +1,35 @@
+name: Katalon CI/CD
+
+on:
+  push:
+    branches:
+      - main  # Chạy khi có commit vào nhánh main
+  pull_request:
+    branches:
+      - main  # Chạy khi có pull request vào nhánh main
+
+jobs:
+  katalon-test:
+    runs-on: ubuntu-latest  # Sử dụng môi trường Linux
+
+    steps:
+      - name: 📥 Checkout code từ GitHub
+        uses: actions/checkout@v3
+
+      - name: 🔽 Download & Cài đặt Katalon Studio
+        run: |
+          wget https://download.katalon.com/9.0.0/Katalon_Studio_Linux.zip
+          unzip -q Katalon_Studio_Linux.zip -d /opt/katalon
+
+      - name: 🚀 Chạy Katalon Test Suite
+        run: |
+          /opt/katalon/katalonc -noSplash -runMode=console \
+            -projectPath="$(pwd)/TestLogin" \
+            -retry=0 -testSuitePath="Test Suites/Test_Suite_Login" \
+            -executionProfile="default" -browserType="Chrome"
+
+      - name: 📤 Upload báo cáo kiểm thử
+        uses: actions/upload-artifact@v3
+        with:
+          name: katalon-test-report
+          path: "Reports"
