@@ -18,12 +18,14 @@ jobs:
 
       - name: 🔽 Download & Cài đặt Katalon Studio
         run: |
-            wget --header="Authorization: Bearer ${{ secrets.c6e85924-54b0-48b4-8b79-deae4e648ada }}" \
-            https://download.katalon.com/9.0.0/Katalon_Studio_Linux.zip
+          curl -L --header "Authorization: Bearer ${{ secrets.c6e85924-54b0-48b4-8b79-deae4e648ada }}" \
+          -o Katalon_Studio_Linux.zip \
+          https://download.katalon.com/9.0.0/Katalon_Studio_Linux.zip
+          unzip Katalon_Studio_Linux.zip -d katalon
 
       - name: 🚀 Chạy Katalon Test Suite
         run: |
-          /opt/katalon/katalonc -noSplash -runMode=console \
+          ./katalon/Katalon_Studio_Linux/katalonc -noSplash -runMode=console \
             -projectPath="$(pwd)/TestLogin" \
             -retry=0 -testSuitePath="Test Suites/Test_Suite_Login" \
             -executionProfile="default" -browserType="Chrome"
