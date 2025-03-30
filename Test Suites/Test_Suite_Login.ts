@@ -18,7 +18,7 @@
       <testCaseId>Test Cases/Login_Hutech_Test_Case</testCaseId>
       <testDataLink>
          <combinationType>ONE</combinationType>
-         <id>88cf4e2d-48a5-4865-9fb0-421b4d0857ee</id>
+         <id>25f535aa-a960-49a7-9c5d-1a2935613514</id>
          <iterationEntity>
             <iterationType>ALL</iterationType>
             <value></value>
@@ -27,13 +27,13 @@
       </testDataLink>
       <usingDataBindingAtTestSuiteLevel>true</usingDataBindingAtTestSuiteLevel>
       <variableLink>
-         <testDataLinkId>88cf4e2d-48a5-4865-9fb0-421b4d0857ee</testDataLinkId>
+         <testDataLinkId>25f535aa-a960-49a7-9c5d-1a2935613514</testDataLinkId>
          <type>DATA_COLUMN</type>
          <value>account</value>
          <variableId>94730efe-2f2a-46f8-9e3b-41111f466393</variableId>
       </variableLink>
       <variableLink>
-         <testDataLinkId>88cf4e2d-48a5-4865-9fb0-421b4d0857ee</testDataLinkId>
+         <testDataLinkId>25f535aa-a960-49a7-9c5d-1a2935613514</testDataLinkId>
          <type>DATA_COLUMN</type>
          <value>password</value>
          <variableId>f704f20e-8aff-4956-bcdc-4f3ecad2db11</variableId>
