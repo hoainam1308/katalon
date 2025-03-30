@@ -25,6 +25,19 @@ jobs:
           echo "📜 Danh sách file trong thư mục làm việc:"
           ls -R ${{ github.workspace }}
 
+      - name: Install Chrome
+        run: |
+          sudo apt update
+          sudo apt install -y google-chrome-stable
+
+      - name: Download ChromeDriver
+        run: |
+          wget -q "https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/linux64/chromedriver-linux64.zip" -O chromedriver.zip
+          unzip -o chromedriver.zip
+          sudo mv chromedriver-linux64/chromedriver /opt/Katalon_Studio_Engine_Linux_64-10.1.1/configuration/resources/temp/webdriver/chromedriver
+          sudo chmod +x /opt/Katalon_Studio_Engine_Linux_64-10.1.1/configuration/resources/temp/webdriver/chromedriver
+          echo "✅ ChromeDriver installed successfully!"
+
       - name: 🔽 Download & Cài đặt Katalon Studio
         run: |
           wget https://download.katalon.com/10.1.1/Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz
@@ -34,8 +47,6 @@ jobs:
         run: chmod +x /opt/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc
 
       - name: 🚀 Chạy Katalon Test Suite
-        env:
-          KATALON_API_KEY: ${{ secrets.KATALON_API_KEY }}
         run: |
           /opt/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc -noSplash -runMode=console \
             -projectPath="${{ github.workspace }}/TestLogin.prj" \
@@ -46,10 +57,11 @@ jobs:
             -proxy.auth.option=NO_PROXY \
             -proxy.system.option=NO_PROXY \
             -proxy.system.applyToDesiredCapabilities=true \
-            -webui.autoUpdateDrivers=true
+            -webui.autoUpdateDrivers=false
 
       - name: 📤 Upload báo cáo kiểm thử
         uses: actions/upload-artifact@v4
         with:
           name: katalon-test-report
           path: "Reports"
+
