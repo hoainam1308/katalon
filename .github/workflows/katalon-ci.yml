@@ -1,67 +1,61 @@
-name: Katalon CI/CD
+name: Katalon CI Test Execution
 
+# Kích hoạt workflow khi có push vào nhánh main hoặc develop
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [ main, develop ]
+  # Hoặc kích hoạt khi có Pull Request nhắm vào nhánh main
+  # pull_request:
+  #   branches: [ main ]
 
 jobs:
-  katalon-test:
-    runs-on: ubuntu-latest
+  execute-katalon-tests:
+    name: Execute Katalon Tests
+    runs-on: ubuntu-latest # Chọn hệ điều hành cho runner (ubuntu, windows, macos)
 
     steps:
-      - name: 📥 Checkout code từ GitHub
-        uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v4 # Action để checkout code từ repo
+
+      - name: Set up JDK 11 # Katalon thường yêu cầu Java
+        uses: actions/setup-java@v4
         with:
-          fetch-depth: 0
+          java-version: '11' # Hoặc phiên bản Java phù hợp với KRE bạn dùng
+          distribution: 'temurin' # Hoặc 'zulu', 'adopt'
 
-      - name: 🛠 Kiểm tra thư mục làm việc
-        run: |
-          echo "📂 Kiểm tra thư mục hiện tại:"
-          pwd
-          echo "📜 Danh sách file trong thư mục làm việc:"
-          ls -R ${{ github.workspace }}
+      # ----- Cách 1: Sử dụng Action chính thức của Katalon (Khuyến nghị) -----
+      - name: Run Katalon Studio Tests using Official Action
+        uses: katalon-studio/katalon-studio-github-action@v3 # Sử dụng action chính thức
+        with:
+          version: 'latest' # Chỉ định phiên bản KRE (ví dụ: '8.5.5') hoặc để 'latest'
+          api_key: ${{ secrets.KATALON_API_KEY }} # Sử dụng secret đã tạo
+          project_path: '${{ github.workspace }}/TestLogin.prj' # Đường dẫn tương đối đến thư mục gốc dự án Katalon trong repo
+          args: >- # Các tham số dòng lệnh cho KRE (bỏ -apiKey vì đã cung cấp ở trên)
+            -runMode=console
+            -retry=0
+            -testSuitePath="Test Suites/Test_Suite_Login" # <<< THAY ĐỔI TÊN TEST SUITE CỦA BẠN
+            -executionProfile="default"                 # <<< THAY ĐỔI PROFILE NẾU CẦN
+            -browserType="Chrome"                       # <<< THAY ĐỔI TRÌNH DUYỆT (Chrome, Firefox, EdgeChromium)
+            --config -webui.autoUpdateDrivers=true
+            # -testOpsProjectId=YOUR_TESTOPS_PROJECT_ID # (Tùy chọn) Gửi kết quả lên TestOps
+            # -serverUrl=https://testops.katalon.io     # (Tùy chọn) URL TestOps
 
-      - name: Install Chrome
-        run: |
-          sudo apt update
-          sudo apt install -y google-chrome-stable      
+      # ----- Cách 2: Tải và chạy KRE thủ công (Ít khuyến nghị hơn) -----
+      # Bạn sẽ cần tìm link download KRE, giải nén và chạy thủ công
+      # - name: Download Katalon Runtime Engine
+      #   run: |
+      #     wget -q <URL_DOWNLOAD_KRE_LINUX.zip> -O kre.zip
+      #     unzip -q kre.zip
+      #     # mv katalon-runtime-engine_linux_64-X.Y.Z kre # Đổi tên thư mục nếu cần
+      #
+      # - name: Run Katalon Studio Tests Manually
+      #   run: |
+      #     ./kre/katalonc -noSplash -runMode=console -projectPath="." -retry=0 -testSuitePath="Test Suites/YourTestSuiteName" -executionProfile="default" -browserType="Chrome" -apiKey="${{ secrets.KATALON_API_KEY }}" --config -webui.autoUpdateDrivers=true
 
-      - name: 🔽 Download & Cài đặt Katalon Studio
-        run: |
-          wget https://download.katalon.com/10.1.1/Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz
-          tar -xvzf Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz -C /opt/
-          
-      - name: Download ChromeDriver
-        run: |
-          wget -q "https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/linux64/chromedriver-linux64.zip" -O chromedriver.zip
-          unzip -o chromedriver.zip
-          sudo mv chromedriver-linux64/chromedriver /opt/Katalon_Studio_Engine_Linux_64-10.1.1/configuration/resources/temp/webdriver/chromedriver
-          sudo chmod +x /opt/Katalon_Studio_Engine_Linux_64-10.1.1/configuration/resources/temp/webdriver/chromedriver
-          echo "✅ ChromeDriver installed successfully!"
-
-      - name: 🛠 Cấp quyền thực thi cho Katalon
-        run: chmod +x /opt/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc
-
-      - name: 🚀 Chạy Katalon Test Suite
-        run: |
-          /opt/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc -noSplash -runMode=console \
-            -projectPath="${{ github.workspace }}/TestLogin.prj" \
-            -retry=0 -testSuitePath="Test Suites/Test_Suite_Login" \
-            -browserType="Chrome" \
-            -executionProfile="default" \
-            -apiKey="c6e85924-54b0-48b4-8b79-deae4e648ada" --config \
-            -proxy.auth.option=NO_PROXY \
-            -proxy.system.option=NO_PROXY \
-            -proxy.system.applyToDesiredCapabilities=true \
-            -webui.autoUpdateDrivers=false
-
-      - name: 📤 Upload báo cáo kiểm thử
+      - name: Upload Reports
+        if: always() # Luôn chạy bước này, kể cả khi test fail
         uses: actions/upload-artifact@v4
         with:
-          name: katalon-test-report
-          path: "Reports"
-
+          name: katalon-reports # Tên của artifact sẽ được tải lên
+          path: reports/ # Đường dẫn đến thư mục chứa báo cáo của Katalon
+          retention-days: 7 # Số ngày lưu trữ artifact (tùy chọn)
