@@ -19,14 +19,6 @@ import org.openqa.selenium.Keys as Keys
 
 WebUI.openBrowser('https://hutech.edu.vn')
 
-ChromeOptions options = new ChromeOptions()
-options.addArguments('--headless')
-options.addArguments('--no-sandbox')
-options.addArguments('--disable-dev-shm-usage')
-
-WebDriver driver = new ChromeDriver(options)
-DriverFactory.changeWebDriver(driver)
-
 WebUI.navigateToUrl('http://e-graduate.hutech.edu.vn/portal')
 
 WebUI.setText(findTestObject('Object Repository/Page_E-LEARNING HUTECH  elearning - i Hc Cn_f0801a/input_Ti khon_eid'), 
