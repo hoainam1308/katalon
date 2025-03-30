@@ -25,6 +25,20 @@ jobs:
           echo "📜 Danh sách file trong thư mục làm việc:"
           ls -R ${{ github.workspace }}
 
+      - name: Install Chrome
+        run: |
+          sudo apt update
+          sudo apt install -y google-chrome-stable
+
+      - name: Download ChromeDriver
+        run: |
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1)
+          DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+          wget -q "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip" -O chromedriver.zip
+          unzip chromedriver.zip
+          sudo mv chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+
       - name: 🔽 Download & Cài đặt Katalon Studio
         run: |
           wget https://download.katalon.com/10.1.1/Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz
