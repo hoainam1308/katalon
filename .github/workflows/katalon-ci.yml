@@ -24,6 +24,13 @@ jobs:
       - name: 🛠 Cấp quyền thực thi cho Katalon
         run: chmod +x /opt/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc
 
+      - name: 🛠 Kiểm tra thư mục làm việc
+        run: |
+          echo "📂 Kiểm tra thư mục hiện tại:"
+          pwd
+          echo "📜 Danh sách file trong thư mục làm việc:"
+          ls -R ${{ github.workspace }}
+    
       - name: 🚀 Chạy Katalon Test Suite
         env:
           KATALON_API_KEY: ${{ secrets.KATALON_API_KEY }}
