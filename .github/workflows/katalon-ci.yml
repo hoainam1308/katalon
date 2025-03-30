@@ -11,7 +11,8 @@ on:
 jobs:
   katalon-test:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 30
+    
     steps:
       - name: 📥 Checkout code từ GitHub
         uses: actions/checkout@v3
@@ -20,38 +21,60 @@ jobs:
 
       - name: 🛠 Kiểm tra thư mục làm việc
         run: |
-          echo "📂 Kiểm tra thư mục hiện tại:"
-          pwd
-          echo "📜 Danh sách file trong thư mục làm việc:"
-          ls -R ${{ github.workspace }}
+          echo "📂 Thư mục hiện tại: $(pwd)"
+          echo "📜 Nội dung thư mục:"
+          ls -la
+          echo "📜 Nội dung project Katalon:"
+          ls -la TestLogin.prj/
 
       - name: 🔽 Download & Cài đặt Katalon Studio Engine
         run: |
-          wget https://download.katalon.com/10.1.1/Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz
-          tar -xvzf Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz -C /opt/
-         
+          wget -q https://download.katalon.com/10.1.1/Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz
+          sudo mkdir -p /opt/katalon
+          sudo tar -xzf Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz -C /opt/katalon
+          sudo chmod +x /opt/katalon/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc
+          echo "/opt/katalon/Katalon_Studio_Engine_Linux_64-10.1.1" >> $GITHUB_PATH
 
-      - name: 🛠 Cấp quyền thực thi cho Katalon
-        run: chmod +x /opt/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc
+      - name: 🛠 Cài đặt Chrome và Chromedriver
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip google-chrome-stable
+          CHROME_VERSION=$(google-chrome --version | cut -d ' ' -f 3 | cut -d '.' -f 1)
+          wget -q https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}
+          CHROMEDRIVER_VERSION=$(cat LATEST_RELEASE_${CHROME_VERSION})
+          wget -q https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip
+          sudo unzip chromedriver_linux64.zip -d /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+          rm LATEST_RELEASE_${CHROME_VERSION} chromedriver_linux64.zip
 
       - name: 🚀 Chạy Katalon Test Suite
         env:
           KATALON_API_KEY: ${{ secrets.KATALON_API_KEY }}
+          DISPLAY: ":99"
         run: |
-          /opt/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc -noSplash -runMode=console \
+          Xvfb :99 -screen 0 1024x768x16 &
+          export DISPLAY=:99
+          
+          katalonc -noSplash -runMode=console \
             -projectPath="${{ github.workspace }}/TestLogin.prj" \
             -retry=0 -testSuitePath="Test Suites/Test_Suite_Login" \
             -browserType="Chrome" \
             -executionProfile="default" \
-            -apiKey=${{ secrets.KATALON_API_KEY }} --config \
-            -proxy.auth.option=NO_PROXY \
-            -proxy.system.option=NO_PROXY \
-            -proxy.system.applyToDesiredCapabilities=true \
-            -webui.autoUpdateDrivers=false
+            -apiKey=${{ secrets.KATALON_API_KEY }} \
+            -config \
+              -webui.autoUpdateDrivers=true \
+              -proxy.auth.option=NO_PROXY \
+              -proxy.system.option=NO_PROXY \
+              -proxy.system.applyToDesiredCapabilities=true \
+              -webui.chrome.arg.userDataDir=/tmp/chrome-profile \
+              -webui.chrome.arg.headless=true \
+              -webui.chrome.arg.no-sandbox=true \
+              -webui.chrome.arg.disable-gpu=true \
+              -webui.chrome.arg.disable-dev-shm-usage=true
 
       - name: 📤 Upload báo cáo kiểm thử
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: katalon-test-report
-          path: "Reports"
-
+          path: "TestLogin.prj/Reports"
