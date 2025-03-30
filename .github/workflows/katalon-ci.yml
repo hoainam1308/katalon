@@ -1,39 +1,57 @@
-name: Katalon CI
+name: Katalon CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  test:
+  katalon-test:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-        java-version: '8'
-        distribution: 'adopt'
-        
-    - name: Download Katalon Studio
-      run: |
-        wget -qO katalon.zip https://download.katalon.com/${{ secrets.KATALON_VERSION }}/Katalon_Studio_Linux_64-${{ secrets.KATALON_VERSION }}.zip
-        unzip -qq katalon.zip -d katalon
-        chmod +x katalon/Katalon_Studio_Linux_64-${{ secrets.KATALON_VERSION }}/katalon
-        
-    - name: Run Katalon tests
-      run: |
-        cd katalon/Katalon_Studio_Linux_64-${{ secrets.KATALON_VERSION }}
-        ./katalon -noSplash -runMode=console -projectPath="${{ github.workspace }}" -retry=0 -testSuitePath="Test Suites/Your_Test_Suite" -browserType="Chrome" -apiKey=${{ secrets.KATALON_API_KEY }} -orgID=${{ secrets.KATALON_ORG_ID }}
-        
-    - name: Upload test reports
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: test-reports
-        path: Reports/
+      - name: 📥 Checkout code từ GitHub
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: 🛠 Kiểm tra thư mục làm việc
+        run: |
+          echo "📂 Kiểm tra thư mục hiện tại:"
+          pwd
+          echo "📜 Danh sách file trong thư mục làm việc:"
+          ls -R ${{ github.workspace }}
+
+      - name: 🔽 Download & Cài đặt Katalon Studio Engine
+        run: |
+          wget https://download.katalon.com/10.1.1/Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz
+          tar -xvzf Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz -C /opt/
+         
+
+      - name: 🛠 Cấp quyền thực thi cho Katalon
+        run: chmod +x /opt/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc
+
+      - name: 🚀 Chạy Katalon Test Suite
+        env:
+          KATALON_API_KEY: ${{ secrets.KATALON_API_KEY }}
+        run: |
+          /opt/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc -noSplash -runMode=console \
+            -projectPath="${{ github.workspace }}/TestLogin.prj" \
+            -retry=0 -testSuitePath="Test Suites/Test_Suite_Login" \
+            -browserType="Chrome" \
+            -executionProfile="default" \
+            -apiKey=${{ secrets.KATALON_API_KEY }} --config \
+            -proxy.auth.option=NO_PROXY \
+            -proxy.system.option=NO_PROXY \
+            -proxy.system.applyToDesiredCapabilities=true \
+            -webui.autoUpdateDrivers=false
+
+      - name: 📤 Upload báo cáo kiểm thử
+        uses: actions/upload-artifact@v4
+        with:
+          name: katalon-test-report
+          path: "Reports"
+
