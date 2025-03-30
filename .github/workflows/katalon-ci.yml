@@ -2,9 +2,11 @@ name: Katalon CI/CD
 
 on:
   push:
-    branches: [ "main" ]  # hoặc branch bạn muốn trigger CI/CD
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   katalon-tests:
