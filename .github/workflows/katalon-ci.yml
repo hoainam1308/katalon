@@ -9,42 +9,59 @@ on:
       - main
 
 jobs:
-  katalon-tests:
+  katalon-test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - name: 📥 Checkout code từ GitHub
+        uses: actions/checkout@v3
         with:
-          java-version: '17'
-          distribution: 'adopt'
+          fetch-depth: 0
 
-      - name: Install Katalon Runtime Engine
+      - name: 🛠 Kiểm tra thư mục làm việc
         run: |
-          wget https://download.katalon.com/katalon-studio/8.6.5/Katalon_Studio_Engine_Linux_64-8.6.5.tar.gz # Thay đổi phiên bản nếu cần
-          tar -xzf Katalon_Studio_Engine_Linux_64-8.6.5.tar.gz
-          sudo mv katalon /opt/
+          echo "📂 Kiểm tra thư mục hiện tại:"
+          pwd
+          echo "📜 Danh sách file trong thư mục làm việc:"
+          ls -R ${{ github.workspace }}
 
-      - name: Run Katalon Tests
-        env:
-          KATALON_API_KEY: ${{ secrets.KATALON_API_KEY }}  # Nếu bạn sử dụng Katalon TestOps
-          LICENSE_KEY: ${{ secrets.KATALON_LICENSE_KEY }}  # Nếu bạn có License
+      - name: Install Chrome
         run: |
-          export DISPLAY=:99
-          sh -e /opt/katalon/katalon --consoleLog -noSplash -runMode=console \
-            -projectPath="${{ github.workspace }}/TestLogin.prj" \ # Thay đổi đường dẫn đến project của bạn
-            -testSuiteCollectionPath="Test Suites/Test_Suite_Login" \ # Thay đổi đường dẫn đến test suite collection
-            -executionProfile="default" \ # Thay đổi profile nếu cần
-            -browserType="Chrome" \ # Thay đổi browser nếu cần
-            ${{ secrets.KATALON_LICENSE_KEY != '' && format('--apiKey={0}', secrets.KATALON_LICENSE_KEY) || '' }} \ # Thêm license key nếu có
-            -reportFolder="reports" \ # Nơi lưu trữ báo cáo
-            -retry=0 \
-            -testOpsMode=true
+          sudo apt update
+          sudo apt install -y google-chrome-stable      
 
-      - name: Upload Test Report
-        uses: actions/upload-artifact@v3
+      - name: 🔽 Download & Cài đặt Katalon Studio
+        run: |
+          wget https://download.katalon.com/10.1.1/Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz
+          tar -xvzf Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz -C /opt/
+          
+      - name: Download ChromeDriver
+        run: |
+          wget -q "https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/linux64/chromedriver-linux64.zip" -O chromedriver.zip
+          unzip -o chromedriver.zip
+          sudo mv chromedriver-linux64/chromedriver /opt/Katalon_Studio_Engine_Linux_64-10.1.1/configuration/resources/temp/webdriver/chromedriver
+          sudo chmod +x /opt/Katalon_Studio_Engine_Linux_64-10.1.1/configuration/resources/temp/webdriver/chromedriver
+          echo "✅ ChromeDriver installed successfully!"
+
+      - name: 🛠 Cấp quyền thực thi cho Katalon
+        run: chmod +x /opt/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc
+
+      - name: 🚀 Chạy Katalon Test Suite
+        run: |
+          /opt/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc -noSplash -runMode=console \
+            -projectPath="${{ github.workspace }}/TestLogin.prj" \
+            -retry=0 -testSuitePath="Test Suites/Test_Suite_Login" \
+            -browserType="Chrome" \
+            -executionProfile="default" \
+            -apiKey="c6e85924-54b0-48b4-8b79-deae4e648ada" --config \
+            -proxy.auth.option=NO_PROXY \
+            -proxy.system.option=NO_PROXY \
+            -proxy.system.applyToDesiredCapabilities=true \
+            -webui.autoUpdateDrivers=false
+
+      - name: 📤 Upload báo cáo kiểm thử
+        uses: actions/upload-artifact@v4
         with:
-          name: Katalon Test Report
-          path: reports
+          name: katalon-test-report
+          path: "Reports"
+
