@@ -1,4 +1,4 @@
-name: Katalon CI/CD (Windows)
+name: Katalon CI/CD
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   katalon-test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: 📥 Checkout code từ GitHub
@@ -18,22 +18,23 @@ jobs:
 
       - name: 🔽 Download & Cài đặt Katalon Studio
         run: |
-          Invoke-WebRequest -Uri "https://download.katalon.com/installer/10x/KatalonSetup.exe" -OutFile "KatalonSetup.exe"
-          Start-Process -FilePath ".\KatalonSetup.exe" -ArgumentList "/S" -Wait
-          dir "C:\Program Files\Katalon" -Recurse
-        shell: powershell
+          wget https://download.katalon.com/10.1.1/Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz
+          tar -xvzf Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz -C /opt/
+
+      - name: 🛠 Cấp quyền thực thi cho Katalon
+        run: chmod +x /opt/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc
 
       - name: 🚀 Chạy Katalon Test Suite
+        env:
+          KATALON_API_KEY: ${{ secrets.KATALON_API_KEY }}
         run: |
-          $katalonPath = "C:\Program Files\Katalon\Katalon Studio\katalonc.exe"
-          & $katalonPath -noSplash -runMode=console `
-            -projectPath="${{ github.workspace }}\TestLogin" `
-            -retry=0 `
-            -testSuitePath="Test Suites/Test_Suite_Login" `
-            -executionProfile="default" `
-            -browserType="Chrome" `
-            -apiKey="c6e85924-54b0-48b4-8b79-deae4e648ada"
-        shell: powershell
+          /opt/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc -noSplash -runMode=console \
+            -projectPath="${{ github.workspace }}/TestLogin/TestLogin.prj" \
+            -retry=0 -testSuitePath="Test Suites/Test_Suite_Login" \
+            -browserType="Chrome" -executionProfile="default" \
+            -apiKey="${{ secrets.KATALON_API_KEY }}" \
+            --config -proxy.auth.option=NO_PROXY -proxy.system.option=NO_PROXY \
+            -proxy.system.applyToDesiredCapabilities=true -webui.autoUpdateDrivers=true
 
       - name: 📤 Upload báo cáo kiểm thử
         uses: actions/upload-artifact@v4
