@@ -28,8 +28,13 @@ jobs:
       - name: Install Chrome
         run: |
           sudo apt update
-          sudo apt install -y google-chrome-stable
+          sudo apt install -y google-chrome-stable      
 
+      - name: 🔽 Download & Cài đặt Katalon Studio
+        run: |
+          wget https://download.katalon.com/10.1.1/Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz
+          tar -xvzf Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz -C /opt/
+          
       - name: Download ChromeDriver
         run: |
           wget -q "https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/linux64/chromedriver-linux64.zip" -O chromedriver.zip
@@ -37,11 +42,6 @@ jobs:
           sudo mv chromedriver-linux64/chromedriver /opt/Katalon_Studio_Engine_Linux_64-10.1.1/configuration/resources/temp/webdriver/chromedriver
           sudo chmod +x /opt/Katalon_Studio_Engine_Linux_64-10.1.1/configuration/resources/temp/webdriver/chromedriver
           echo "✅ ChromeDriver installed successfully!"
-
-      - name: 🔽 Download & Cài đặt Katalon Studio
-        run: |
-          wget https://download.katalon.com/10.1.1/Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz
-          tar -xvzf Katalon_Studio_Engine_Linux_64-10.1.1.tar.gz -C /opt/
 
       - name: 🛠 Cấp quyền thực thi cho Katalon
         run: chmod +x /opt/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc
