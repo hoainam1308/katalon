@@ -39,7 +39,7 @@ jobs:
         run: |
           /opt/Katalon_Studio_Engine_Linux_64-10.1.1/katalonc -noSplash -runMode=console \
             -projectPath="${{ github.workspace }}/TestLogin.prj" \
-            -retry=0 -testSuitePath="Test Suites/Test_Suite_Login.ts" \
+            -retry=0 -testSuitePath="Test Suites/Test_Suite_Login" \
             -browserType="Chrome" -executionProfile="default" \
             -apiKey="${{ secrets.KATALON_API_KEY }}" \
             --config -proxy.auth.option=NO_PROXY -proxy.system.option=NO_PROXY \
